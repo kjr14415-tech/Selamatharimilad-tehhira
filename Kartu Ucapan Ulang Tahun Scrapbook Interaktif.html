@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAPPY BIRTHDAY — Pembuat Kartu Ucapan Scrapbook</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Quicksand', 'sans-serif'],
+            display: ['Fredoka', 'sans-serif'],
+            hand: ['Patrick Hand', 'cursive'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --card-bg: #EBDDF7;
+      --card-bg-alt: #F6EEFC;
+      --accent-main: #E64980;
+      --accent-dark: #D6336C;
+      --accent-soft: #FF85B3;
+      --ink-brown: #5C4033;
+      --page-grad-1: #f5ebfc;
+      --page-grad-2: #ebd9f8;
+      --page-grad-3: #fce7f3;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, var(--page-grad-1) 0%, var(--page-grad-2) 50%, var(--page-grad-3) 100%);
+      color: var(--ink-brown);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.35s ease;
+    }
+
+    .font-display { font-family: 'Fredoka', sans-serif; }
+    .font-hand { font-family: 'Patrick Hand', cursive; }
+    .font-caveat { font-family: 'Caveat', cursive; }
+
+    /* Bingkai Ponsel & Layar Kartu */
+    .phone-frame {
+      background: #1f1726;
+      border-radius: 42px;
+      padding: 11px;
+      box-shadow:
+        0 28px 60px -15px rgba(92, 64, 51, 0.3),
+        0 0 0 2px rgba(255, 255, 255, 0.65) inset;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .phone-frame.viewer-only {
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+      max-width: 100% !important;
+      width: 100% !important;
+      min-height: 100vh;
+    }
+
+    .card-viewport {
+      background-color: var(--card-bg);
+      background-image: radial-gradient(rgba(230, 73, 128, 0.09) 1.2px, transparent 1.2px);
+      background-size: 18px 18px;
+      border-radius: 32px;
+      height: 735px;
+      max-height: 85vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease;
+    }
+
+    .phone-frame.viewer-only .card-viewport {
+      border-radius: 0;
+      height: 100vh;
+      max-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      box-shadow: 0 0 50px rgba(92, 64, 51, 0.14);
+    }
+
+    .scrap-scroll {
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    .scrap-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .scrap-scroll::-webkit-scrollbar-thumb {
+      background: rgba(92, 64, 51, 0.28);
+      border-radius: 9999px;
+    }
+
+    /* Efek Stiker Die-Cut Putih */
+    .sticker-cutout {
+      filter:
+        drop-shadow(0 2px 0 #ffffff)
+        drop-shadow(0 -2px 0 #ffffff)
+        drop-shadow(2px 0 0 #ffffff)
+        drop-shadow(-2px 0 0 #ffffff)
+        drop-shadow(0 6px 12px rgba(92, 64, 51, 0.16));
+    }
+
+    /* Kertas Surat Sobek (Torn Paper) */
+    .torn-paper-sheet {
+      position: relative;
+      background-color: #fffdf7;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 27px,
+        rgba(230, 73, 128, 0.15) 28px
+      );
+      box-shadow: 0 12px 26px -8px rgba(92, 64, 51, 0.18);
+      border-left: 1px solid rgba(92, 64, 51, 0.08);
+      border-right: 1px solid rgba(92, 64, 51, 0.08);
+    }
+
+    .torn-edge-top {
+      height: 12px;
+      width: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M0,12 L0,5 L8,2 L17,7 L26,1 L36,6 L45,2 L54,8 L63,2 L73,7 L82,1 L92,6 L101,2 L111,7 L120,3 L120,12 Z' fill='%23fffdf7'/%3E%3C/svg%3E");
+      background-size: 120px 12px;
+      background-repeat: repeat-x;
+    }
+
+    .torn-edge-bottom {
+      height: 12px;
+      width: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L120,0 L120,7 L111,3 L101,9 L92,4 L82,10 L73,4 L63,9 L54,3 L45,9 L36,4 L26,10 L17,4 L8,9 L0,5 Z' fill='%23fffdf7'/%3E%3C/svg%3E");
+      background-size: 120px 12px;
+      background-repeat: repeat-x;
+    }
+
+    /* Huruf Gelembung 3D Melengkung */
+    .bubble-3d-text {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      fill: var(--accent-soft);
+      stroke: #ffffff;
+      stroke-width: 5px;
+      paint-order: stroke fill;
+      filter: drop-shadow(0 3px 0 var(--accent-dark)) drop-shadow(0 5px 8px rgba(92, 64, 51, 0.25));
+      letter-spacing: 3px;
+    }
+
+    /* Tombol Kapsul Coquette Berbingkai Cokelat */
+    .btn-pill-coquette {
+      background: linear-gradient(180deg, var(--accent-soft) 0%, var(--accent-main) 100%);
+      border: 2.5px solid var(--ink-brown);
+      box-shadow: 0 4px 0 var(--ink-brown), 0 8px 18px rgba(92, 64, 51, 0.22);
+      color: #ffffff;
+      text-shadow: 0 1px 0 rgba(92, 64, 51, 0.45);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .btn-pill-coquette:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-pill-coquette:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--ink-brown), 0 4px 10px rgba(92, 64, 51, 0.18);
+    }
+
+    /* Animasi */
+    @keyframes hatDropIn {
+      0% { opacity: 0; transform: translateY(-45px) scale(0.7) rotate(-14deg); }
+      70% { opacity: 1; transform: translateY(4px) scale(1.06) rotate(4deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes popSticker {
+      0% { opacity: 0; transform: scale(0.45) rotate(-6deg); }
+      75% { opacity: 1; transform: scale(1.06) rotate(2deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+
+    @keyframes flameDance {
+      0% { transform: scale(1, 1) rotate(-3deg); opacity: 0.95; }
+      50% { transform: scale(1.12, 0.92) rotate(3deg); opacity: 1; }
+      100% { transform: scale(0.94, 1.08) rotate(-2deg); opacity: 0.92; }
+    }
+
+    @keyframes smokeDrift {
+      0% { opacity: 0.9; transform: translateY(0) scale(0.6); }
+      100% { opacity: 0; transform: translateY(-42px) translateX(12px) scale(1.8); }
+    }
+
+    @keyframes spinDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes confettiDrop {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(780px) rotate(620deg); opacity: 0; }
+    }
+
+    @keyframes lidLift {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-46px) rotate(-11deg); }
+    }
+
+    .anim-hat { animation: hatDropIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .anim-pop { animation: popSticker 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .anim-float { animation: floatGentle 3.2s ease-in-out infinite; }
+    .anim-flame { transform-origin: bottom center; animation: flameDance 0.34s infinite alternate; }
+    .anim-smoke { animation: smokeDrift 1.15s ease-out forwards; }
+    .anim-spin { animation: spinDisc 7s linear infinite; }
+    .anim-spin-paused { animation-play-state: paused; }
+    .gift-lid-open { animation: lidLift 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+    .confetti-bit {
+      position: absolute;
+      top: -14px;
+      pointer-events: none;
+      z-index: 45;
+      animation: confettiDrop linear forwards;
+    }
+
+    .polaroid-strip {
+      background: #ffffff;
+      padding: 5px 5px 14px 5px;
+      border-radius: 6px;
+      box-shadow: 0 6px 14px rgba(92, 64, 51, 0.2);
+      border: 1px solid rgba(92, 64, 51, 0.14);
+    }
+
+    .retro-tv-box {
+      background: linear-gradient(160deg, #faedcd 0%, #f3d5b5 100%);
+      border: 2.5px solid #5C4033;
+      border-radius: 22px;
+      box-shadow: 0 6px 0 #5C4033, 0 12px 22px rgba(92, 64, 51, 0.18);
+    }
+
+    /* Accordion Editor */
+    details > summary {
+      list-style: none;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notifikasi -->
+  <div id="toast-box" class="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-xs w-full pointer-events-none"></div>
+
+  <!-- Elemen Audio MP3 Kustom -->
+  <audio id="custom-mp3-player" loop preload="auto"></audio>
+
+  <!-- Navigasi Utama Atas (Otomatis sembunyi jika dibuka lewat link penerima) -->
+  <header id="studio-header" class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-pink-200/80 shadow-xs">
+    <div class="max-w-6xl mx-auto px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+      <!-- Identitas Aplikasi -->
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-2xl bg-[#EBDDF7] border-2 border-[#E64980] flex items-center justify-center text-lg shadow-xs shrink-0">
+          🎂
+        </div>
+        <div class="leading-tight">
+          <h1 class="font-display font-bold text-base sm:text-lg text-[#5C4033]">
+            Scrapbook Ultah Studio
+          </h1>
+          <p class="text-[11px] font-bold text-[#E64980] hidden sm:block">
+            Custom Teks • Foto • Tema Pastel • Share Link
+          </p>
+        </div>
+      </div>
+
+      <!-- Switch Mode Jelas: Edit & Custom vs Preview Kartu (Penting untuk layar HP) -->
+      <div class="flex items-center bg-[#f3e8fc] p-1 rounded-2xl border border-purple-200">
+        <button
+          id="tab-btn-edit"
+          type="button"
+          class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer bg-white text-[#D6336C] shadow-xs"
+        >
+          ✏️ Edit &amp; Custom
+        </button>
+        <button
+          id="tab-btn-preview"
+          type="button"
+          class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer text-[#5C4033] hover:text-[#D6336C]"
+        >
+          🎁 Preview Kartu
+        </button>
+      </div>
+
+      <!-- Aksi Cepat: Bagikan Link & Layar Penuh -->
+      <div class="flex items-center gap-1.5">
+        <button
+          id="btn-header-share"
+          type="button"
+          class="px-3 py-1.5 rounded-2xl bg-[#E64980] hover:bg-[#D6336C] text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer flex items-center gap-1"
+        >
+          <span>🔗</span>
+          <span>Bagikan Link</span>
+        </button>
+
+        <button
+          id="btn-header-fullscreen"
+          type="button"
+          class="px-3 py-1.5 rounded-2xl bg-white hover:bg-pink-50 text-[#5C4033] border border-pink-200 text-xs sm:text-sm font-bold transition cursor-pointer"
+          title="Tampilan Layar Penuh Penerima"
+        >
+          ⛶ <span class="hidden md:inline">Layar Penuh</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Area Utama: Mode Editor + Mode Preview Kartu -->
+  <main id="studio-main" class="max-w-6xl mx-auto px-3 sm:px-5 py-5">
+    <div id="studio-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start justify-items-center">
+      
+      <!-- KOLOM 1: PANEL EDITOR / CUSTOM REAL-TIME -->
+      <aside id="editor-panel" class="w-full lg:col-span-6 space-y-4">
+        <div class="bg-white/92 backdrop-blur-md rounded-3xl border border-pink-200 shadow-lg p-4 sm:p-6">
+          <div class="flex items-center justify-between gap-2 pb-3 border-b border-pink-100">
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-[#EBDDF7] text-[#D6336C] text-[11px] font-bold">
+                Kustomisasi Real-Time
+              </span>
+              <h2 class="font-display font-bold text-lg sm:text-xl text-[#5C4033] mt-0.5">
+                Atur Isi, Foto &amp; Musik Kartu ✨
+              </h2>
+            </div>
+
+            <button
+              id="btn-reset-default"
+              type="button"
+              class="px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-[#D6336C] text-xs font-bold transition cursor-pointer shrink-0"
+            >
+              Reset Default
+            </button>
+          </div>
+
+          <div class="mt-4 space-y-3.5">
+            <!-- BAGIAN A: PILIH TEMA WARNA PASTEL & MUSIK LATAR -->
+            <details open class="group rounded-2xl bg-[#faf5ff] border border-purple-200/80 p-3.5">
+              <summary class="flex items-center justify-between cursor-pointer font-display font-bold text-sm text-[#5C4033]">
+                <span>🎨 1. Tema Warna Pastel &amp; Musik Latar</span>
+                <span class="text-xs text-[#E64980] group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+
+              <div class="mt-3 pt-3 border-t border-purple-100 space-y-3">
+                <!-- Pilihan 4 Tema Pastel -->
+                <div>
+                  <label class="block text-xs font-bold text-[#5C4033] mb-1.5">
+                    Pilih Nuansa Warna Kartu:
+                  </label>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="theme-selector-grid">
+                    <button type="button" data-theme="lavender" class="theme-chip p-2 rounded-xl border-2 text-left transition cursor-pointer bg-[#EBDDF7] border-[#E64980]">
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#E64980] border border-white"></span>
+                        <span class="text-xs font-bold text-[#5C4033]">Lavender</span>
+                      </div>
+                    </button>
+
+                    <button type="button" data-theme="pink" class="theme-chip p-2 rounded-xl border-2 text-left transition cursor-pointer bg-[#FFE3EC] border-transparent">
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#F06595] border border-white"></span>
+                        <span class="text-xs font-bold text-[#5C4033]">Pink Coquette</span>
+                      </div>
+                    </button>
+
+                    <button type="button" data-theme="blue" class="theme-chip p-2 rounded-xl border-2 text-left transition cursor-pointer bg-[#E3F2FD] border-transparent">
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#339AF0] border border-white"></span>
+                        <span class="text-xs font-bold text-[#5C4033]">Baby Blue</span>
+                      </div>
+                    </button>
+
+                    <button type="button" data-theme="peach" class="theme-chip p-2 rounded-xl border-2 text-left transition cursor-pointer bg-[#FFF0E5] border-transparent">
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#FF7B54] border border-white"></span>
+                        <span class="text-xs font-bold text-[#5C4033]">Cream Peach</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Pilihan Musik Latar Web Audio API / MP3 Sendiri -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="inp-song-mode" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Musik Latar Kartu:
+                    </label>
+                    <select
+                      id="inp-song-mode"
+                      class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 focus:outline-none focus:ring-2 focus:ring-[#E64980] text-xs font-bold text-[#5C4033]"
+                    >
+                      <option value="musicbox">🎵 Kotak Musik Happy Birthday</option>
+                      <option value="lofi">🎹 Lo-Fi Piano Lembut</option>
+                      <option value="mp3">🎧 Upload File MP3 Sendiri</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="inp-song-title" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Judul Lagu di Pemutar:
+                    </label>
+                    <input
+                      id="inp-song-title"
+                      type="text"
+                      maxlength="40"
+                      class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 focus:outline-none focus:ring-2 focus:ring-[#E64980] text-xs font-semibold text-[#5C4033]"
+                    />
+                  </div>
+                </div>
+
+                <!-- Input Upload MP3 (muncul saat opsi MP3 dipilih) -->
+                <div id="mp3-upload-wrapper" class="hidden p-2.5 rounded-xl bg-white border border-dashed border-pink-300">
+                  <label class="flex items-center justify-between gap-2 cursor-pointer text-xs font-bold text-[#D6336C]">
+                    <span id="mp3-file-label">📁 Pilih file audio (.mp3 / .m4a / .wav)</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-pink-100 text-[#D6336C]">Pilih File</span>
+                    <input id="inp-mp3-file" type="file" accept="audio/*" class="hidden" />
+                  </label>
+                  <p class="text-[10px] text-neutral-500 mt-1">
+                    *Catatan: File MP3 lokal diputar langsung di perangkat ini. Untuk link berbagi, musik otomatis memakai melodi Web Audio agar ukuran URL tetap ringan.
+                  </p>
+                </div>
+              </div>
+            </details>
+
+            <!-- BAGIAN B: UPLOAD 7 FOTO KENANGAN (AUTO KOMPRESI UNTUK LINK) -->
+            <details open class="group rounded-2xl bg-[#fff5f8] border border-pink-200/90 p-3.5">
+              <summary class="flex items-center justify-between cursor-pointer font-display font-bold text-sm text-[#5C4033]">
+                <span>📸 2. Ganti 7 Foto Kenangan (Otomatis Kompres)</span>
+                <span class="text-xs text-[#E64980] group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+
+              <div class="mt-3 pt-3 border-t border-pink-100 space-y-2.5">
+                <p class="text-[11px] text-[#5C4033]/80">
+                  Pilih foto dari galeri HP—otomatis di-crop &amp; dikompresi agar ikut tersimpan di link saat dibagikan!
+                </p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-mainPhoto" src="" alt="Preview" class="w-8 h-8 rounded-full object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">1. Foto Topi</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="mainPhoto" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-tv1Photo" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">2. Layar TV 1</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="tv1Photo" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-tv2Photo" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">3. Layar TV 2</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="tv2Photo" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-bouquet1" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">4. Polaroid 1</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="bouquet1" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-bouquet2" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">5. Polaroid 2</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="bouquet2" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs">
+                    <img id="thumb-bouquet3" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">6. Polaroid 3</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Ganti Foto</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="bouquet3" class="photo-file-input hidden" />
+                  </label>
+
+                  <label class="p-2 rounded-xl bg-white hover:bg-pink-50 border border-pink-200 flex items-center gap-2 cursor-pointer transition shadow-2xs col-span-2 sm:col-span-3">
+                    <img id="thumb-giftPhoto" src="" alt="Preview" class="w-8 h-8 rounded-lg object-cover border border-pink-300 shrink-0" />
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[11px] font-bold text-[#5C4033] truncate">7. Foto Kejutan di Dalam Kotak Kado</div>
+                      <div class="text-[10px] text-[#E64980] font-semibold">Muncul saat kotak kado pink diklik</div>
+                    </div>
+                    <input type="file" accept="image/*" data-photo-slot="giftPhoto" class="photo-file-input hidden" />
+                  </label>
+                </div>
+              </div>
+            </details>
+
+            <!-- BAGIAN C: TAHAP 1 & 2 (TOPI ULTAH & TIUP LILIN KUE) -->
+            <details open class="group rounded-2xl bg-[#faf5ff] border border-purple-200/80 p-3.5">
+              <summary class="flex items-center justify-between cursor-pointer font-display font-bold text-sm text-[#5C4033]">
+                <span>🎩 3. Teks Topi Ultah &amp; Kue Tiup Lilin</span>
+                <span class="text-xs text-[#E64980] group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+
+              <div class="mt-3 pt-3 border-t border-purple-100 space-y-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="inp-recipient" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Nama Penerima ("To: ..."):
+                    </label>
+                    <input id="inp-recipient" type="text" maxlength="30" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-hat-bubble" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Balon Chat Stiker di Topi Ultah:
+                    </label>
+                    <input id="inp-hat-bubble" type="text" maxlength="34" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="inp-cake-before" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Teks Ajakan Tiup Lilin:
+                    </label>
+                    <input id="inp-cake-before" type="text" maxlength="55" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-cake-after" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Teks Setelah Lilin Ditiup:
+                    </label>
+                    <input id="inp-cake-after" type="text" maxlength="55" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]" />
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- BAGIAN D: SURAT TULIP & 4 BALON CHAT TV RETRO -->
+            <details open class="group rounded-2xl bg-[#fff5f8] border border-pink-200/90 p-3.5">
+              <summary class="flex items-center justify-between cursor-pointer font-display font-bold text-sm text-[#5C4033]">
+                <span>🌷 4. Isi Surat Tulip &amp; 4 Balon Chat TV Retro</span>
+                <span class="text-xs text-[#E64980] group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+
+              <div class="mt-3 pt-3 border-t border-pink-100 space-y-2.5">
+                <div>
+                  <label for="inp-letter-title" class="block text-xs font-bold text-[#5C4033] mb-1">
+                    Judul Surat Tulip:
+                  </label>
+                  <input id="inp-letter-title" type="text" maxlength="35" class="w-full px-3 py-2 rounded-xl bg-white border border-pink-200 text-xs font-semibold text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]" />
+                </div>
+
+                <div>
+                  <label for="inp-letter-body" class="block text-xs font-bold text-[#5C4033] mb-1">
+                    Isi Surat Tulip Panjang:
+                  </label>
+                  <textarea id="inp-letter-body" rows="4" maxlength="550" class="w-full px-3 py-2 rounded-xl bg-white border border-pink-200 text-xs sm:text-sm text-[#5C4033] focus:outline-none focus:ring-2 focus:ring-[#E64980]"></textarea>
+                </div>
+
+                <!-- 4 Balon Chat di TV Retro -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label for="inp-tv1-chat1" class="block text-[11px] font-bold text-[#5C4033] mb-0.5">
+                      Balon Chat TV 1 (Atas):
+                    </label>
+                    <input id="inp-tv1-chat1" type="text" maxlength="44" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-pink-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-tv1-chat2" class="block text-[11px] font-bold text-[#5C4033] mb-0.5">
+                      Balon Chat TV 1 (Bawah):
+                    </label>
+                    <input id="inp-tv1-chat2" type="text" maxlength="44" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-pink-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-tv2-chat1" class="block text-[11px] font-bold text-[#5C4033] mb-0.5">
+                      Balon Chat TV 2 (Atas):
+                    </label>
+                    <input id="inp-tv2-chat1" type="text" maxlength="44" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-pink-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-tv2-chat2" class="block text-[11px] font-bold text-[#5C4033] mb-0.5">
+                      Balon Chat TV 2 (Bawah):
+                    </label>
+                    <input id="inp-tv2-chat2" type="text" maxlength="44" class="w-full px-2.5 py-1.5 rounded-xl bg-white border border-pink-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- BAGIAN E: BUKET BUNGA, AMPLOP & SURAT KADO PENUTUP -->
+            <details open class="group rounded-2xl bg-[#faf5ff] border border-purple-200/80 p-3.5">
+              <summary class="flex items-center justify-between cursor-pointer font-display font-bold text-sm text-[#5C4033]">
+                <span>🎁 5. Buket Bunga, Label Amplop &amp; Kado Penutup</span>
+                <span class="text-xs text-[#E64980] group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+
+              <div class="mt-3 pt-3 border-t border-purple-100 space-y-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="inp-bouquet-title" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Judul Buket Bunga Melengkung:
+                    </label>
+                    <input id="inp-bouquet-title" type="text" maxlength="38" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+
+                  <div>
+                    <label for="inp-envelope-label" class="block text-xs font-bold text-[#5C4033] mb-1">
+                      Label Amplop / Ajakan Kado:
+                    </label>
+                    <input id="inp-envelope-label" type="text" maxlength="45" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033]" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="inp-gift-note" class="block text-xs font-bold text-[#5C4033] mb-1">
+                    Isi Surat Kado Penutup (Saat Kotak Kado Terbuka):
+                  </label>
+                  <textarea id="inp-gift-note" rows="2" maxlength="160" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033]"></textarea>
+                </div>
+
+                <div>
+                  <label for="inp-sender" class="block text-xs font-bold text-[#5C4033] mb-1">
+                    Nama Pengirim ("From: ..."):
+                  </label>
+                  <input id="inp-sender" type="text" maxlength="35" class="w-full px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-semibold text-[#5C4033]" />
+                </div>
+              </div>
+            </details>
+
+            <!-- TOMBOL UTAMA: BUAT LINK & SALIN -->
+            <div class="pt-1 flex flex-col sm:flex-row gap-2.5">
+              <button
+                id="btn-editor-generate-link"
+                type="button"
+                class="flex-1 py-3.5 px-5 rounded-2xl btn-pill-coquette font-display font-bold text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>🔗</span>
+                <span>Buat Link &amp; Salin</span>
+              </button>
+
+              <button
+                id="btn-editor-jump-preview"
+                type="button"
+                class="lg:hidden py-3 px-4 rounded-2xl bg-[#EBDDF7] hover:bg-[#e1cdf4] text-[#5C4033] border-2 border-[#5C4033] font-display font-bold text-sm cursor-pointer"
+              >
+                🎁 Lihat Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- KOLOM 2: PRATINJAU KARTU INTERAKTIF (BINGKAI PONSEL) -->
+      <section id="preview-panel" class="hidden lg:flex w-full lg:col-span-6 flex-col items-center">
+        <!-- Bilah Lompat Cepat Antar Tahap -->
+        <div id="quick-stage-bar" class="w-full max-w-[395px] mb-3 px-3 py-2 rounded-2xl bg-white/90 backdrop-blur border border-pink-200 shadow-xs flex items-center justify-between gap-1 text-xs">
+          <div class="flex items-center gap-1">
+            <button type="button" data-goto="1" class="stage-pill px-2.5 py-1 rounded-xl font-bold transition cursor-pointer">1. Topi</button>
+            <button type="button" data-goto="2" class="stage-pill px-2.5 py-1 rounded-xl font-bold transition cursor-pointer">2. Lilin</button>
+            <button type="button" data-goto="3" class="stage-pill px-2.5 py-1 rounded-xl font-bold transition cursor-pointer">3. Scrapbook</button>
+          </div>
+
+          <button
+            id="btn-preview-replay"
+            type="button"
+            class="px-2.5 py-1 rounded-xl bg-pink-50 hover:bg-pink-100 text-[#D6336C] font-bold transition cursor-pointer"
+            title="Ulangi animasi dari awal"
+          >
+            🔄 Ulangi
+          </button>
+        </div>
+
+        <!-- Bingkai Ponsel -->
+        <div id="phone-frame" class="phone-frame w-full max-w-[395px]">
+          <div id="phone-notch" class="w-28 h-5 bg-[#120d17] rounded-b-2xl mx-auto mb-1.5 flex items-center justify-center gap-2">
+            <span class="w-9 h-1 rounded-full bg-neutral-700"></span>
+            <span class="w-2 h-2 rounded-full bg-pink-400/60"></span>
+          </div>
+
+          <div id="card-viewport" class="card-viewport">
+            <!-- Tombol Keluar Mode Layar Penuh -->
+            <button
+              id="btn-exit-fullscreen"
+              type="button"
+              class="hidden fixed top-3 right-3 z-50 px-3 py-1.5 rounded-full bg-white/95 text-[#5C4033] border border-pink-300 text-xs font-bold shadow-md backdrop-blur cursor-pointer"
+            >
+              ✏️ Edit Kartu
+            </button>
+
+            <!-- Lapisan Konfeti -->
+            <div id="confetti-layer" class="absolute inset-0 overflow-hidden pointer-events-none z-40"></div>
+
+            <!-- Konten Dinamis Tahap 1, 2, atau 3 -->
+            <div id="card-stage-root" class="flex-1 flex flex-col h-full overflow-hidden relative z-10"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // =========================================================================
+    // 1. TEMA WARNA PASTEL & ILUSTRASI BAWAAN (TANPA DEPENDENSI EKSTERNAL)
+    // =========================================================================
+    const PASTEL_THEMES = {
+      lavender: {
+        cardBg: '#EBDDF7',
+        cardBgAlt: '#F6EEFC',
+        accentMain: '#E64980',
+        accentDark: '#D6336C',
+        accentSoft: '#FF85B3',
+        inkBrown: '#5C4033',
+        grad1: '#f5ebfc',
+        grad2: '#ebd9f8',
+        grad3: '#fce7f3',
+      },
+      pink: {
+        cardBg: '#FFE3EC',
+        cardBgAlt: '#FFF0F5',
+        accentMain: '#F06595',
+        accentDark: '#C2255C',
+        accentSoft: '#FF8787',
+        inkBrown: '#5C4033',
+        grad1: '#fff0f6',
+        grad2: '#ffdeeb',
+        grad3: '#fce7f3',
+      },
+      blue: {
+        cardBg: '#E3F2FD',
+        cardBgAlt: '#F0F7FF',
+        accentMain: '#339AF0',
+        accentDark: '#1971C2',
+        accentSoft: '#74C0FC',
+        inkBrown: '#3B4252',
+        grad1: '#edf6ff',
+        grad2: '#dbeafe',
+        grad3: '#e0f2fe',
+      },
+      peach: {
+        cardBg: '#FFF0E5',
+        cardBgAlt: '#FFF8F2',
+        accentMain: '#FF7B54',
+        accentDark: '#D9480F',
+        accentSoft: '#FFA94D',
+        inkBrown: '#5C4033',
+        grad1: '#fff7ed',
+        grad2: '#ffedd5',
+        grad3: '#ffe4e6',
+      },
+    };
+
+    function createCutePortraitDataUrl(bgHex = '#ffd6e7', hairHex = '#5C4033', blushHex = '#ff85b3', badge = '🎀') {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+          <rect width="200" height="200" fill="${bgHex}"/>
+          <circle cx="100" cy="100" r="80" fill="#ffffff" opacity="0.55"/>
+          <path d="M44 108 C44 54, 156 54, 156 108 C164 142, 156 176, 140 190 L60 190 C44 176, 36 142, 44 108 Z" fill="${hairHex}"/>
+          <path d="M56 102 C56 70, 144 70, 144 102 C144 138, 124 156, 100 156 C76 156, 56 138, 56 102 Z" fill="#ffe6d8" stroke="#5C4033" stroke-width="3"/>
+          <path d="M56 96 C68 78, 86 82, 100 74 C114 82, 132 78, 144 96 C138 70, 120 58, 100 58 C80 58, 62 70, 56 96 Z" fill="${hairHex}"/>
+          <circle cx="80" cy="110" r="6" fill="#3d281e"/>
+          <circle cx="120" cy="110" r="6" fill="#3d281e"/>
+          <circle cx="78" cy="108" r="2" fill="#ffffff"/>
+          <circle cx="118" cy="108" r="2" fill="#ffffff"/>
+          <ellipse cx="69" cy="122" rx="9" ry="5" fill="${blushHex}" opacity="0.65"/>
+          <ellipse cx="131" cy="122" rx="9" ry="5" fill="${blushHex}" opacity="0.65"/>
+          <path d="M90 126 Q100 136 110 126" fill="none" stroke="#5C4033" stroke-width="3" stroke-linecap="round"/>
+          <path d="M50 198 C58 166, 78 158, 100 158 C122 158, 142 166, 150 198 Z" fill="#ff9ec4" stroke="#5C4033" stroke-width="3"/>
+          <text x="142" y="62" font-size="24">${badge}</text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg.trim());
+    }
+
+    const DEFAULT_PHOTOS = {
+      mainPhoto: createCutePortraitDataUrl('#fce4f1', '#5C4033', '#ff7aa8', '✨'),
+      tv1Photo: createCutePortraitDataUrl('#fef3c7', '#6f4e37', '#fb7185', '🎀'),
+      tv2Photo: createCutePortraitDataUrl('#e0f2fe', '#4a3525', '#f472b6', '🌸'),
+      bouquet1: createCutePortraitDataUrl('#ffe4e6', '#5C4033', '#f43f5e', '🌷'),
+      bouquet2: createCutePortraitDataUrl('#f3e8ff', '#4c3228', '#ec4899', '💖'),
+      bouquet3: createCutePortraitDataUrl('#dcfce7', '#5C4033', '#fb7185', '🌼'),
+      giftPhoto: createCutePortraitDataUrl('#ffedd5', '#5C4033', '#f97316', '🧸'),
+    };
+
+    const DEFAULT_CARD = {
+      theme: 'lavender',
+      songMode: 'musicbox',
+      songTitle: 'Happy Birthday Melody',
+      recipient: 'Bestieku',
+      hatBubble: 'Happy Birthday! 🥳',
+      cakeBeforeText: 'Jangan cuman diliatin tiup dong lilinnya 😊',
+      cakeAfterText: 'Ciee udah nambah umur aja nih 🥺',
+      letterTitle: 'HAPPY BIRTHDAY',
+      letterBody:
+        'Selamat ulang tahun yaa! Terima kasih sudah bertahan, tumbuh, dan selalu bawa energi positif buat orang-orang di sekitarmu. Semoga di usia yang baru ini semua hal baik datang menghampiri, sehat selalu, rezekinya lancar, dan makin bahagia setiap hari. You deserve all the love in the world! 🌷✨',
+      tv1Chat1: 'ingat momen seru ini gak? 🥺',
+      tv1Chat2: 'ketawa bareng terus ya!',
+      tv2Chat1: 'gemes banget sih kita ✨',
+      tv2Chat2: 'best memories ever 💖',
+      bouquetTitle: 'This is my favorite flower',
+      envelopeLabel: 'pencet aja kalo mau buka ⤵️',
+      giftNote: 'Semoga kamu suka ya sama kado virtualnya! Peluk jauh & doa terbaik selalu buatmu 🥺💖',
+      sender: 'Sahabatmu',
+      photos: { ...DEFAULT_PHOTOS },
+    };
+
+    // =========================================================================
+    // 2. STATE APLIKASI & AUDIO (WEB AUDIO API + MP3 KUSTOM)
+    // =========================================================================
+    let state = {
+      card: structuredClone(DEFAULT_CARD),
+      activeTab: 'edit', // 'edit' | 'preview' (untuk mode mobile/tablet)
+      stage: 1, // 1: Topi & Huruf Melengkung, 2: Kue Tiup Lilin, 3: Scrapbook & Kado
+      introStep: 'hat', // 'hat' -> 'full'
+      candlesLit: true,
+      giftOpened: false,
+      isPlayingMusic: false,
+      fullscreenViewer: false,
+      customMp3Url: null,
+    };
+
+    let musicTimer = null;
+    let audioCtx = null;
+
+    function applyThemeVariables(themeKey) {
+      const t = PASTEL_THEMES[themeKey] || PASTEL_THEMES.lavender;
+      const root = document.documentElement;
+      root.style.setProperty('--card-bg', t.cardBg);
+      root.style.setProperty('--card-bg-alt', t.cardBgAlt);
+      root.style.setProperty('--accent-main', t.accentMain);
+      root.style.setProperty('--accent-dark', t.accentDark);
+      root.style.setProperty('--accent-soft', t.accentSoft);
+      root.style.setProperty('--ink-brown', t.inkBrown);
+      root.style.setProperty('--page-grad-1', t.grad1);
+      root.style.setProperty('--page-grad-2', t.grad2);
+      root.style.setProperty('--page-grad-3', t.grad3);
+
+      document.querySelectorAll('.theme-chip').forEach((chip) => {
+        const isSelected = chip.getAttribute('data-theme') === themeKey;
+        chip.style.borderColor = isSelected ? t.accentMain : 'transparent';
+        chip.classList.toggle('shadow-sm', isSelected);
+      });
+    }
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function playSynthTone(freq, duration = 0.36, isLofi = false) {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const overtone = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = isLofi ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        overtone.type = 'sine';
+        overtone.frequency.setValueAtTime(isLofi ? freq * 0.5 : freq * 2, now);
+
+        const overGain = ctx.createGain();
+        overGain.gain.setValueAtTime(isLofi ? 0.035 : 0.015, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(isLofi ? 0.065 : 0.08, now + 0.025);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        osc.connect(gain);
+        overtone.connect(overGain);
+        overGain.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        overtone.start(now);
+        osc.stop(now + duration + 0.03);
+        overtone.stop(now + duration + 0.03);
+      } catch (e) {}
+    }
+
+    const MELODY_SEQUENCES = {
+      musicbox: [
+        [261.63, 320], [261.63, 220], [293.66, 520], [261.63, 520], [349.23, 520], [329.63, 900],
+        [261.63, 320], [261.63, 220], [293.66, 520], [261.63, 520], [392.00, 520], [349.23, 900],
+        [261.63, 320], [261.63, 220], [523.25, 520], [440.00, 520], [349.23, 520], [329.63, 520], [293.66, 850],
+        [466.16, 320], [466.16, 220], [440.00, 520], [349.23, 520], [392.00, 520], [349.23, 1050],
+      ],
+      lofi: [
+        [261.63, 500], [329.63, 500], [392.00, 500], [493.88, 750],
+        [440.00, 500], [392.00, 500], [329.63, 500], [293.66, 750],
+        [261.63, 500], [293.66, 500], [329.63, 500], [392.00, 850],
+      ],
+    };
+
+    function startBackgroundAudio() {
+      stopBackgroundAudio();
+      state.isPlayingMusic = true;
+      updateMusicControlsUI();
+
+      const mp3El = document.getElementById('custom-mp3-player');
+      if (state.card.songMode === 'mp3' && state.customMp3Url && mp3El) {
+        mp3El.src = state.customMp3Url;
+        mp3El.play().catch(() => {
+          showToast('Ketuk tombol Play pada pemutar lagu untuk memulai MP3', 'info');
+        });
+        return;
+      }
+
+      const isLofi = state.card.songMode === 'lofi';
+      const seq = MELODY_SEQUENCES[isLofi ? 'lofi' : 'musicbox'];
+      let idx = 0;
+
+      const tick = () => {
+        if (!state.isPlayingMusic) return;
+        const [freq, dur] = seq[idx % seq.length];
+        playSynthTone(freq, dur / 1000, isLofi);
+        idx++;
+        musicTimer = setTimeout(tick, dur + (isLofi ? 120 : 70));
+      };
+      tick();
+    }
+
+    function stopBackgroundAudio() {
+      state.isPlayingMusic = false;
+      if (musicTimer) {
+        clearTimeout(musicTimer);
+        musicTimer = null;
+      }
+      const mp3El = document.getElementById('custom-mp3-player');
+      if (mp3El) {
+        mp3El.pause();
+      }
+      updateMusicControlsUI();
+    }
+
+    function toggleBackgroundAudio() {
+      if (state.isPlayingMusic) {
+        stopBackgroundAudio();
+      } else {
+        startBackgroundAudio();
+      }
+    }
+
+    function updateMusicControlsUI() {
+      const disc = document.getElementById('vinyl-disc');
+      const btn = document.getElementById('btn-music-toggle');
+      if (disc) disc.classList.toggle('anim-spin-paused', !state.isPlayingMusic);
+      if (btn) btn.innerHTML = state.isPlayingMusic ? '⏸ Pause' : '▶ Play';
+    }
+
+    // =========================================================================
+    // 3. UTILITAS TOAST, KONFETI & SERIALISASI LINK (#data=...)
+    // =========================================================================
+    function showToast(msg, type = 'info') {
+      const box = document.getElementById('toast-box');
+      if (!box) return;
+      const el = document.createElement('div');
+      const style =
+        type === 'success'
+          ? 'bg-emerald-600 text-white'
+          : type === 'error'
+          ? 'bg-rose-600 text-white'
+          : 'bg-[#5C4033] text-pink-50';
+      el.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-lg text-xs sm:text-sm font-bold flex items-center gap-2 anim-pop ${style}`;
+      el.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : '🎀'}</span><span>${esc(msg)}</span>`;
+      box.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 3000);
+    }
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function fireConfetti(count = 44) {
+      const layer = document.getElementById('confetti-layer');
+      if (!layer) return;
+      const colors = ['#ff6b9d', '#c084fc', '#fbbf24', '#34d399', '#fb7185', '#60a5fa', '#ffffff'];
+
+      for (let i = 0; i < count; i++) {
+        const bit = document.createElement('div');
+        const w = 7 + Math.random() * 8;
+        const h = w * (Math.random() > 0.45 ? 0.65 : 1);
+        const dur = 1.6 + Math.random() * 1.5;
+        const delay = Math.random() * 0.3;
+
+        bit.className = `confetti-bit ${Math.random() > 0.5 ? 'rounded-full' : 'rounded-xs'}`;
+        bit.style.width = `${w}px`;
+        bit.style.height = `${h}px`;
+        bit.style.left = `${Math.random() * 100}%`;
+        bit.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        bit.style.animationDuration = `${dur}s`;
+        bit.style.animationDelay = `${delay}s`;
+
+        layer.appendChild(bit);
+        setTimeout(() => bit.remove(), (dur + delay + 0.2) * 1000);
+      }
+    }
+
+    function encodeCardToHash() {
+      try {
+        // Hanya menyertakan foto yang telah diganti (bukan default SVG) agar URL tetap ringkas & cepat dimuat
+        const customPhotos = {};
+        Object.keys(state.card.photos).forEach((slot) => {
+          const val = state.card.photos[slot];
+          if (val && val.startsWith('data:image/jpeg')) {
+            customPhotos[slot] = val;
+          }
+        });
+
+        const payload = {
+          ...state.card,
+          songMode: state.card.songMode === 'mp3' ? 'musicbox' : state.card.songMode,
+          photos: customPhotos,
+        };
+
+        const json = JSON.stringify(payload);
+        const bytes = new TextEncoder().encode(json);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return 'data=' + encodeURIComponent(btoa(binary));
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function decodeCardFromHash() {
+      try {
+        const hash = window.location.hash || '';
+        if (!hash.includes('data=')) return null;
+        const raw = hash.split('data=')[1].split('&')[0];
+        const binary = atob(decodeURIComponent(raw));
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const parsed = JSON.parse(new TextDecoder().decode(bytes));
+        return {
+          ...structuredClone(DEFAULT_CARD),
+          ...parsed,
+          photos: {
+            ...DEFAULT_PHOTOS,
+            ...(parsed.photos || {}),
+          },
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function copyTextToClipboard(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return success;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // =========================================================================
+    // 4. KOMPRESI FOTO OTOMATIS DARI GALERI HP (UNTUK URL HASH RINGAN)
+    // =========================================================================
+    function compressAndCropImage(file, size = 180, quality = 0.65) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = size;
+              canvas.height = size;
+              const ctx = canvas.getContext('2d');
+
+              const minSide = Math.min(img.width, img.height);
+              const sx = (img.width - minSide) / 2;
+              const sy = (img.height - minSide) / 2;
+
+              ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+              resolve(canvas.toDataURL('image/jpeg', quality));
+            } catch (err) {
+              reject(err);
+            }
+          };
+          img.onerror = reject;
+          img.src = ev.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // =========================================================================
+    // 5. ASET ILUSTRASI SVG SCRAPBOOK
+    // =========================================================================
+    function svgPinkPolkaHat(extraClass = 'w-24 h-24') {
+      return `
+        <svg viewBox="0 0 140 140" class="${extraClass} sticker-cutout" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="70" cy="20" r="13" fill="#ffffff" stroke="var(--accent-main)" stroke-width="3"/>
+          <circle cx="65" cy="17" r="4" fill="#ffe3ec"/>
+          <path d="M26 116 L70 28 L114 116 C88 126, 52 126, 26 116 Z" fill="var(--accent-soft)" stroke="var(--accent-dark)" stroke-width="3.5" stroke-linejoin="round"/>
+          <circle cx="68" cy="54" r="6.5" fill="#ffffff"/>
+          <circle cx="52" cy="76" r="7.5" fill="#ffffff"/>
+          <circle cx="85" cy="74" r="7" fill="#ffffff"/>
+          <circle cx="43" cy="100" r="6.5" fill="#ffffff"/>
+          <circle cx="70" cy="96" r="8" fill="#ffffff"/>
+          <circle cx="96" cy="101" r="6.5" fill="#ffffff"/>
+          <path d="M24 115 Q35 123 47 116 Q58 124 70 116 Q82 124 93 116 Q105 123 116 115" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      `;
+    }
+
+    function svgWatercolorTulips() {
+      return `
+        <svg viewBox="0 0 130 165" class="w-24 h-32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M64 156 Q62 112 65 68" stroke="#52b788" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M40 156 Q44 116 38 82" stroke="#74c69d" stroke-width="4" stroke-linecap="round"/>
+          <path d="M88 156 Q84 116 92 84" stroke="#52b788" stroke-width="4" stroke-linecap="round"/>
+          <path d="M63 136 C42 132, 24 116, 20 98 C38 102, 54 116, 63 136 Z" fill="#95d5b2" opacity="0.9"/>
+          <path d="M65 128 C86 124, 106 108, 110 90 C92 94, 76 108, 65 128 Z" fill="#74c69d" opacity="0.9"/>
+          <path d="M46 42 C46 24, 56 18, 65 32 C74 18, 84 24, 84 42 C84 60, 74 70, 65 70 C56 70, 46 60, 46 42 Z" fill="#ff85b3"/>
+          <path d="M55 44 C55 28, 65 24, 65 34 C65 24, 75 28, 75 44 C75 58, 70 68, 65 68 C60 68, 55 58, 55 44 Z" fill="#ff5c97" opacity="0.65"/>
+          <path d="M20 58 C20 42, 29 37, 37 49 C45 37, 54 42, 54 58 C54 74, 45 83, 37 83 C29 83, 20 74, 20 58 Z" fill="#ffa8c9"/>
+          <path d="M76 60 C76 44, 85 39, 93 51 C101 39, 110 44, 110 60 C110 76, 101 85, 93 85 C85 85, 76 76, 76 60 Z" fill="#ff70a6"/>
+        </svg>
+      `;
+    }
+
+    function svgRibbonBowRed() {
+      return `
+        <svg viewBox="0 0 110 58" class="w-24 h-12 mx-auto -mb-3 relative z-10 sticker-cutout" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M48 30 L28 52 L38 54 L53 33 Z" fill="#e03131" stroke="#5C4033" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M62 30 L82 52 L72 54 L57 33 Z" fill="#e03131" stroke="#5C4033" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M52 26 C32 8, 12 14, 16 30 C19 42, 38 38, 52 28 Z" fill="#ff6b6b" stroke="#5C4033" stroke-width="2.5"/>
+          <path d="M58 26 C78 8, 98 14, 94 30 C91 42, 72 38, 58 28 Z" fill="#ff6b6b" stroke="#5C4033" stroke-width="2.5"/>
+          <rect x="47" y="19" width="16" height="16" rx="6" fill="#fa5252" stroke="#5C4033" stroke-width="2.5"/>
+        </svg>
+      `;
+    }
+
+    // =========================================================================
+    // 6. RENDER KARTU INTERAKTIF 3 TAHAP (SESUAI VIDEO REFERENSI)
+    // =========================================================================
+    function updateStagePills() {
+      document.querySelectorAll('.stage-pill').forEach((btn) => {
+        const s = Number(btn.getAttribute('data-goto'));
+        const active = s === state.stage;
+        btn.style.backgroundColor = active ? 'var(--accent-main)' : 'var(--card-bg)';
+        btn.style.color = active ? '#ffffff' : 'var(--ink-brown)';
+      });
+    }
+
+    function renderCard() {
+      updateStagePills();
+      const root = document.getElementById('card-stage-root');
+      if (!root) return;
+
+      const c = state.card;
+
+      // -----------------------------------------------------------------------
+      // TAHAP 1: TOPI ULTAH -> HURUF MELENGKUNG HAPPY BIRTHDAY + FOTO + BALON
+      // -----------------------------------------------------------------------
+      if (state.stage === 1) {
+        const isFull = state.introStep === 'full';
+
+        root.innerHTML = `
+          <div
+            id="stage1-tap-area"
+            role="button"
+            tabindex="0"
+            aria-label="Ketuk untuk lanjut ke kue ulang tahun"
+            class="flex-1 flex flex-col items-center justify-center px-4 py-6 relative cursor-pointer select-none"
+          >
+            ${
+              !isFull
+                ? `
+              <div class="anim-hat flex flex-col items-center">
+                ${svgPinkPolkaHat('w-32 h-32')}
+                <span class="mt-4 font-hand text-base font-bold animate-pulse" style="color: var(--accent-main);">
+                  ketuk topi atau tunggu sebentar... ✨
+                </span>
+              </div>
+            `
+                : `
+              <div class="relative w-[320px] h-[360px] flex items-center justify-center anim-pop">
+                <svg viewBox="0 0 320 340" class="w-full h-full overflow-visible">
+                  <defs>
+                    <path id="curveTop" d="M 38,145 A 122,122 0 0,1 282,145" />
+                    <path id="curveBottom" d="M 32,205 A 130,130 0 0,0 288,205" />
+                  </defs>
+                  <text class="bubble-3d-text text-[34px]">
+                    <textPath href="#curveTop" startOffset="50%" text-anchor="middle">
+                      HAPPY
+                    </textPath>
+                  </text>
+                  <text class="bubble-3d-text text-[31px]">
+                    <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">
+                      BIRTHDAY
+                    </textPath>
+                  </text>
+                </svg>
+
+                <div class="absolute w-44 h-44 flex items-center justify-center">
+                  <div class="w-40 h-40 rounded-full overflow-hidden border-[5px] border-white shadow-xl bg-white">
+                    <img
+                      src="${esc(c.photos.mainPhoto)}"
+                      alt="Foto ${esc(c.recipient)}"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div class="absolute -top-12 right-1 rotate-[16deg] pointer-events-none">
+                    ${svgPinkPolkaHat('w-20 h-20')}
+                  </div>
+
+                  <div class="anim-float absolute -left-8 top-4 px-2.5 py-1 rounded-2xl bg-white border-2 border-[#5C4033] shadow-md font-hand text-xs font-bold -rotate-12 max-w-[125px] text-center" style="color: var(--accent-main);">
+                    ${esc(c.hatBubble)}
+                  </div>
+
+                  <div class="anim-float absolute -right-6 top-8 text-2xl sticker-cutout" style="animation-delay: 0.4s;">
+                    🥺
+                  </div>
+
+                  <div class="anim-float absolute -left-5 bottom-3 text-2xl sticker-cutout" style="animation-delay: 0.8s;">
+                    🧁
+                  </div>
+
+                  <div class="anim-float absolute -right-5 bottom-3 text-2xl sticker-cutout" style="animation-delay: 1.1s;">
+                    💖
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-2 text-center anim-pop">
+                <p class="font-hand text-lg font-bold" style="color: var(--ink-brown);">
+                  Untuk ${esc(c.recipient)} 🎀
+                </p>
+                <span class="inline-block mt-1.5 px-4 py-1.5 rounded-full bg-white/90 border border-pink-300 text-xs font-bold shadow-xs animate-bounce" style="color: var(--accent-main);">
+                  Ketuk layar untuk lanjut 👉
+                </span>
+              </div>
+            `
+            }
+          </div>
+        `;
+
+        document.getElementById('stage1-tap-area')?.addEventListener('click', () => {
+          getAudioContext();
+          if (state.introStep === 'hat') {
+            state.introStep = 'full';
+            fireConfetti(28);
+            renderCard();
+          } else {
+            goToStage(2);
+          }
+        });
+
+        if (!isFull) {
+          setTimeout(() => {
+            if (state.stage === 1 && state.introStep === 'hat') {
+              state.introStep = 'full';
+              fireConfetti(24);
+              renderCard();
+            }
+          }, 1100);
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // TAHAP 2: KUE ULANG TAHUN & TIUP 3 LILIN
+      // -----------------------------------------------------------------------
+      else if (state.stage === 2) {
+        const lit = state.candlesLit;
+
+        root.innerHTML = `
+          <div class="flex-1 flex flex-col items-center justify-center px-5 py-6 text-center relative select-none">
+            <h2 class="font-hand text-2xl sm:text-[26px] leading-snug font-bold max-w-[290px] mb-5 anim-pop" style="color: var(--accent-main);">
+              ${esc(lit ? c.cakeBeforeText : c.cakeAfterText)}
+            </h2>
+
+            <div
+              id="cake-touch-target"
+              role="button"
+              tabindex="0"
+              aria-label="Kue ulang tahun"
+              class="relative w-60 pt-10 pb-2 flex flex-col items-center cursor-pointer transition hover:scale-[1.02]"
+            >
+              <!-- 3 Lilin -->
+              <div class="flex items-end justify-center gap-7 z-10 -mb-1">
+                ${['#ff85b3', '#ffd43b', '#b197fc']
+                  .map(
+                    (stripe) => `
+                  <div class="flex flex-col items-center">
+                    ${
+                      lit
+                        ? `<div class="anim-flame w-4 h-7 rounded-full bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-100 shadow-[0_0_14px_rgba(255,169,40,0.95)] mb-0.5"></div>`
+                        : `<div class="anim-smoke w-4 h-4 rounded-full bg-gray-400/70 blur-[1.5px] mb-1"></div>`
+                    }
+                    <div class="w-0.5 h-2 bg-[#5C4033]"></div>
+                    <div
+                      class="w-3.5 h-11 rounded-sm border-2 border-[#5C4033]"
+                      style="background: repeating-linear-gradient(-45deg, ${stripe}, ${stripe} 4px, #ffffff 4px, #ffffff 8px);"
+                    ></div>
+                  </div>
+                `
+                  )
+                  .join('')}
+              </div>
+
+              <!-- Tingkat Atas Kue -->
+              <div class="relative w-36 h-14 rounded-t-2xl bg-[#fff3d6] border-[2.5px] border-[#5C4033] flex flex-col items-center justify-start overflow-hidden shadow-xs">
+                <div class="w-full h-5 border-b-2 border-[#5C4033] rounded-b-xl" style="background-color: var(--accent-soft);"></div>
+                <div class="flex gap-3 -mt-1 text-xs">
+                  <span>🍒</span><span>🍒</span><span>🍒</span>
+                </div>
+              </div>
+
+              <!-- Tingkat Bawah Kue -->
+              <div class="relative w-48 h-16 -mt-0.5 rounded-t-xl rounded-b-2xl bg-[#ffc2d9] border-[2.5px] border-[#5C4033] flex flex-col justify-between overflow-hidden shadow-md">
+                <div class="w-full h-5 bg-[#fffdf7] border-b-2 border-[#5C4033] rounded-b-lg"></div>
+                <div class="pb-1.5 font-display text-xs font-bold text-[#5C4033] tracking-wide">
+                  Happy Birthday!
+                </div>
+              </div>
+
+              <!-- Piring -->
+              <div class="w-56 h-3.5 -mt-0.5 rounded-full bg-white border-[2.5px] border-[#5C4033] shadow-sm"></div>
+            </div>
+
+            <div class="mt-5 flex flex-col items-center gap-2.5 w-full max-w-[260px]">
+              ${
+                lit
+                  ? `
+                <p class="font-hand text-base opacity-80 italic" style="color: var(--ink-brown);">
+                  make a wish...
+                </p>
+                <div class="flex items-center gap-2 w-full">
+                  <button
+                    id="btn-tiup"
+                    type="button"
+                    class="flex-1 py-2.5 px-5 rounded-full btn-pill-coquette font-display font-bold text-base flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>👆</span>
+                    <span>Tiup</span>
+                  </button>
+                  <button
+                    id="btn-mic"
+                    type="button"
+                    class="py-2.5 px-3 rounded-full bg-white hover:bg-pink-50 border-2 border-[#5C4033] text-[#5C4033] text-xs font-bold shadow-xs cursor-pointer"
+                    title="Tiup lewat mikrofon"
+                  >
+                    🎤
+                  </button>
+                </div>
+              `
+                  : `
+                <p class="font-hand text-base font-bold animate-bounce" style="color: var(--ink-brown);">
+                  klik lalu ada sesuatu buat kamu 👉👈
+                </p>
+                <button
+                  id="btn-lanjut-scrap"
+                  type="button"
+                  class="w-full py-2.5 px-6 rounded-full btn-pill-coquette font-display font-bold text-base cursor-pointer"
+                >
+                  Lanjut ✨
+                </button>
+              `
+              }
+            </div>
+          </div>
+        `;
+
+        const blowCandles = () => {
+          if (!state.candlesLit) return;
+          state.candlesLit = false;
+          fireConfetti(48);
+          playSynthTone(523.25, 0.25);
+          setTimeout(() => playSynthTone(659.25, 0.25), 90);
+          setTimeout(() => playSynthTone(783.99, 0.4), 180);
+          renderCard();
+        };
+
+        document.getElementById('cake-touch-target')?.addEventListener('click', blowCandles);
+        document.getElementById('btn-tiup')?.addEventListener('click', blowCandles);
+        document.getElementById('btn-mic')?.addEventListener('click', () => triggerMicBlow(blowCandles));
+        document.getElementById('btn-lanjut-scrap')?.addEventListener('click', () => {
+          goToStage(3);
+          startBackgroundAudio();
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // TAHAP 3: HALAMAN SCRAPBOOK VERTIKAL PANJANG & BUKA KADO
+      // -----------------------------------------------------------------------
+      else if (state.stage === 3) {
+        const opened = state.giftOpened;
+
+        root.innerHTML = `
+          <div id="scrapbook-scroller" class="flex-1 scrap-scroll px-4 pt-4 pb-8 space-y-7 relative">
+            
+            <!-- 1. PEMUTAR LAGU RETRO -->
+            <div class="relative flex items-center justify-between gap-2 bg-white/85 backdrop-blur-xs rounded-3xl p-3 border-2 border-[#5C4033] shadow-sm anim-pop">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="relative w-14 h-14 rounded-full border-2 border-[#5C4033] flex items-center justify-center shadow-inner shrink-0" style="background-color: var(--accent-soft);">
+                  <div id="vinyl-disc" class="w-11 h-11 rounded-full overflow-hidden border-2 border-white anim-spin ${state.isPlayingMusic ? '' : 'anim-spin-paused'}">
+                    <img src="${esc(c.photos.mainPhoto)}" alt="Cover lagu" class="w-full h-full object-cover" />
+                  </div>
+                  <span class="w-2.5 h-2.5 rounded-full bg-white border border-[#5C4033] absolute"></span>
+                </div>
+
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1 text-xs font-bold truncate" style="color: var(--accent-main);">
+                    <span>🎶</span>
+                    <span class="truncate">${esc(c.songTitle)}</span>
+                  </div>
+                  <p class="font-hand text-sm truncate" style="color: var(--ink-brown);">
+                    For ${esc(c.recipient)} 🎼
+                  </p>
+                </div>
+              </div>
+
+              <button
+                id="btn-music-toggle"
+                type="button"
+                class="px-3 py-1.5 rounded-full text-white border-2 border-[#5C4033] text-xs font-bold shadow-xs cursor-pointer shrink-0"
+                style="background-color: var(--accent-main);"
+              >
+                ${state.isPlayingMusic ? '⏸ Pause' : '▶ Play'}
+              </button>
+            </div>
+
+            <!-- 2. KERTAS SURAT SOBEK DENGAN BUNGA TULIP CAT AIR -->
+            <div class="relative anim-pop">
+              <div class="torn-edge-top"></div>
+              <div class="torn-paper-sheet px-4 py-3">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-hand text-lg font-bold" style="color: var(--accent-main);">
+                      To: ${esc(c.recipient)}
+                    </p>
+                    <h3 class="font-display font-bold text-xl tracking-wide mb-2" style="color: var(--accent-dark);">
+                      ${esc(c.letterTitle)}
+                    </h3>
+                  </div>
+
+                  <div class="shrink-0 -mt-2 -mr-2">
+                    ${svgWatercolorTulips()}
+                  </div>
+                </div>
+
+                <p class="font-hand text-[17px] leading-[28px] whitespace-pre-line -mt-3" style="color: var(--ink-brown);">
+                  ${esc(c.letterBody)}
+                </p>
+
+                <p class="font-hand text-base font-bold text-right mt-2" style="color: var(--accent-main);">
+                  — ${esc(c.sender)}
+                </p>
+              </div>
+              <div class="torn-edge-bottom"></div>
+            </div>
+
+            <!-- 3. DUA TV TABUNG RETRO BERPITA MERAH + 4 BALON CHAT -->
+            <div class="space-y-6 pt-1">
+              <!-- TV Retro 1 -->
+              <div class="relative flex items-center gap-2">
+                <div class="w-[61%] shrink-0">
+                  ${svgRibbonBowRed()}
+                  <div class="retro-tv-box p-2 flex items-center gap-1.5">
+                    <div class="flex-1 aspect-[4/3] rounded-xl overflow-hidden border-2 border-[#5C4033] bg-black relative">
+                      <img src="${esc(c.photos.tv1Photo)}" alt="Kenangan TV 1" class="w-full h-full object-cover" />
+                      <span class="absolute top-1 left-1 px-1 rounded bg-black/55 text-[8px] text-white font-mono">
+                        REC ●
+                      </span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#e7bc91] border-2 border-[#5C4033]"></span>
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#e7bc91] border-2 border-[#5C4033]"></span>
+                      <div class="w-2.5 h-3.5 flex flex-col justify-between">
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2 Balon Chat di Samping TV 1 -->
+                <div class="flex-1 flex flex-col gap-2">
+                  <div class="bg-white border-2 border-[#5C4033] rounded-2xl rounded-bl-xs px-2.5 py-1.5 shadow-xs">
+                    <p class="font-hand text-xs font-bold leading-snug" style="color: var(--ink-brown);">
+                      ${esc(c.tv1Chat1)}
+                    </p>
+                  </div>
+                  ${
+                    c.tv1Chat2
+                      ? `
+                    <div class="bg-white/95 border-2 border-[#5C4033] rounded-2xl rounded-tl-xs px-2.5 py-1.5 shadow-xs">
+                      <p class="font-hand text-xs font-bold leading-snug" style="color: var(--accent-main);">
+                        ${esc(c.tv1Chat2)}
+                      </p>
+                    </div>
+                  `
+                      : ''
+                  }
+                </div>
+              </div>
+
+              <!-- TV Retro 2 -->
+              <div class="relative flex items-center gap-2">
+                <!-- 2 Balon Chat di Samping TV 2 -->
+                <div class="flex-1 flex flex-col gap-2 text-right">
+                  <div class="bg-white border-2 border-[#5C4033] rounded-2xl rounded-br-xs px-2.5 py-1.5 shadow-xs">
+                    <p class="font-hand text-xs font-bold leading-snug" style="color: var(--ink-brown);">
+                      ${esc(c.tv2Chat1)}
+                    </p>
+                  </div>
+                  ${
+                    c.tv2Chat2
+                      ? `
+                    <div class="bg-white/95 border-2 border-[#5C4033] rounded-2xl rounded-tr-xs px-2.5 py-1.5 shadow-xs">
+                      <p class="font-hand text-xs font-bold leading-snug" style="color: var(--accent-main);">
+                        ${esc(c.tv2Chat2)}
+                      </p>
+                    </div>
+                  `
+                      : ''
+                  }
+                </div>
+
+                <div class="w-[61%] shrink-0">
+                  ${svgRibbonBowRed()}
+                  <div class="retro-tv-box p-2 flex items-center gap-1.5">
+                    <div class="flex-1 aspect-[4/3] rounded-xl overflow-hidden border-2 border-[#5C4033] bg-black relative">
+                      <img src="${esc(c.photos.tv2Photo)}" alt="Kenangan TV 2" class="w-full h-full object-cover" />
+                      <span class="absolute top-1 right-1 px-1 rounded bg-black/55 text-[8px] text-white font-mono">
+                        CH-02
+                      </span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#e7bc91] border-2 border-[#5C4033]"></span>
+                      <span class="w-3.5 h-3.5 rounded-full bg-[#e7bc91] border-2 border-[#5C4033]"></span>
+                      <div class="w-2.5 h-3.5 flex flex-col justify-between">
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                        <span class="h-0.5 bg-[#5C4033]"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. BUKET BUNGA DENGAN 3 FOTO POLAROID -->
+            <div class="pt-2 flex flex-col items-center text-center">
+              <svg viewBox="0 0 300 62" class="w-72 h-14 overflow-visible -mb-2">
+                <defs>
+                  <path id="flowerArc" d="M 20,54 Q 150,10 280,54" />
+                </defs>
+                <text class="font-caveat font-bold text-[25px]" style="fill: var(--accent-main);">
+                  <textPath href="#flowerArc" startOffset="50%" text-anchor="middle">
+                    ${esc(c.bouquetTitle)}
+                  </textPath>
+                </text>
+              </svg>
+
+              <div class="relative w-72 pt-4 pb-2 flex flex-col items-center">
+                <div class="flex items-center justify-center gap-2 text-4xl -mb-5 z-0 sticker-cutout">
+                  <span>🌷</span><span>🌸</span><span>🌻</span><span>🌺</span><span>🌷</span>
+                </div>
+
+                <!-- 3 Strip Polaroid -->
+                <div class="relative z-10 flex items-center justify-center gap-2 px-2">
+                  <div class="polaroid-strip w-20 -rotate-12 translate-y-2">
+                    <div class="w-full h-20 overflow-hidden rounded-xs bg-pink-50">
+                      <img src="${esc(c.photos.bouquet1)}" alt="Polaroid 1" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+
+                  <div class="polaroid-strip w-22 z-20 -translate-y-1">
+                    <div class="w-20 h-20 overflow-hidden rounded-xs bg-pink-50">
+                      <img src="${esc(c.photos.bouquet2)}" alt="Polaroid 2" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+
+                  <div class="polaroid-strip w-20 rotate-12 translate-y-2">
+                    <div class="w-full h-20 overflow-hidden rounded-xs bg-pink-50">
+                      <img src="${esc(c.photos.bouquet3)}" alt="Polaroid 3" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Kertas Pembungkus Buket -->
+                <div class="relative z-20 -mt-5 w-52 h-28 flex flex-col items-center justify-center">
+                  <svg viewBox="0 0 220 120" class="w-full h-full sticker-cutout" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 14 L110 112 L198 14 Q154 28 110 20 Q66 28 22 14 Z" fill="#ffc2d9" stroke="#5C4033" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M56 22 L110 112 L164 22" stroke="#ff85b3" stroke-width="2.5"/>
+                    <path d="M106 64 C88 50, 74 58, 82 70 C88 78, 100 72, 108 66 Z" fill="#ff5c97" stroke="#5C4033" stroke-width="2.5"/>
+                    <path d="M114 64 C132 50, 146 58, 138 70 C132 78, 120 72, 112 66 Z" fill="#ff5c97" stroke="#5C4033" stroke-width="2.5"/>
+                    <path d="M106 68 L94 94 M114 68 L126 94" stroke="#ff5c97" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="110" cy="65" r="6" fill="#ff85b3" stroke="#5C4033" stroke-width="2.5"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. KOTAK KADO PINK + SURAT & FOTO KEJUTAN PENUTUP -->
+            <div class="pt-2 pb-4 flex flex-col items-center text-center">
+              <p class="font-hand text-lg font-bold mb-2 max-w-[280px]" style="color: var(--accent-main);">
+                ${esc(opened ? `Kado spesial dari ${c.sender} 🎀` : c.envelopeLabel)}
+              </p>
+
+              <div
+                id="pink-gift-box"
+                role="button"
+                tabindex="0"
+                aria-label="Klik kotak kado pink untuk membukanya"
+                class="relative w-64 pt-6 flex flex-col items-center cursor-pointer select-none group"
+              >
+                <!-- Isi Kejutan Saat Kotak Kado Dibuka (Foto Kejutan + Surat Penutup) -->
+                <div
+                  class="w-60 rounded-2xl bg-white/95 border-2 border-[#5C4033] p-3.5 mb-[-8px] z-10 shadow-md transition-all duration-500 ${
+                    opened
+                      ? 'opacity-100 translate-y-0 scale-100'
+                      : 'opacity-0 translate-y-8 scale-75 pointer-events-none h-0 p-0 overflow-hidden border-0'
+                  }"
+                >
+                  <div class="flex items-center gap-3 text-left">
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-[#5C4033] shrink-0 bg-pink-50">
+                      <img src="${esc(c.photos.giftPhoto)}" alt="Foto Kejutan Kado" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-1 text-base mb-0.5">
+                        <span>🧸</span><span>💌</span><span>✨</span>
+                      </div>
+                      <p class="font-hand text-sm leading-snug font-bold" style="color: var(--ink-brown);">
+                        ${esc(c.giftNote)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tutup Kotak Kado -->
+                <div class="w-60 h-9 rounded-t-xl bg-[#ff9ec4] border-[2.5px] border-[#5C4033] relative z-20 flex items-center justify-center shadow-xs transition-transform ${opened ? 'gift-lid-open' : 'group-hover:-translate-y-1'}">
+                  <div class="absolute -top-5 flex items-center">
+                    <div class="w-7 h-5 rounded-full bg-[#faedcd] border-2 border-[#5C4033] -rotate-12"></div>
+                    <div class="w-4 h-4 rounded-full bg-[#f3d5b5] border-2 border-[#5C4033] -mx-1 z-10"></div>
+                    <div class="w-7 h-5 rounded-full bg-[#faedcd] border-2 border-[#5C4033] rotate-12"></div>
+                  </div>
+                  <div class="w-7 h-full bg-[#faedcd] border-x-2 border-[#5C4033]"></div>
+                </div>
+
+                <!-- Badan Kotak Kado -->
+                <div class="w-56 h-24 rounded-b-2xl bg-[#ffb3d1] border-[2.5px] border-t-0 border-[#5C4033] relative z-20 flex items-center justify-center shadow-md">
+                  <div class="w-7 h-full bg-[#faedcd] border-x-2 border-[#5C4033]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. DUA TOMBOL PANAH BULAT (< dan >) -->
+            <div class="pt-1 pb-4 flex items-center justify-center gap-6">
+              <button
+                id="btn-bottom-prev"
+                type="button"
+                aria-label="Kembali ke tiup lilin"
+                class="w-11 h-11 rounded-full text-white border-[2.5px] border-[#5C4033] shadow-[0_3px_0_#5C4033] font-display font-bold text-lg flex items-center justify-center cursor-pointer active:translate-y-0.5"
+                style="background-color: var(--accent-soft);"
+              >
+                &lt;
+              </button>
+
+              <button
+                id="btn-bottom-restart"
+                type="button"
+                aria-label="Ulangi dari awal"
+                class="w-11 h-11 rounded-full text-white border-[2.5px] border-[#5C4033] shadow-[0_3px_0_#5C4033] font-display font-bold text-lg flex items-center justify-center cursor-pointer active:translate-y-0.5"
+                style="background-color: var(--accent-soft);"
+              >
+                &gt;
+              </button>
+            </div>
+
+          </div>
+        `;
+
+        document.getElementById('btn-music-toggle')?.addEventListener('click', toggleBackgroundAudio);
+
+        document.getElementById('pink-gift-box')?.addEventListener('click', () => {
+          if (!state.giftOpened) {
+            state.giftOpened = true;
+            fireConfetti(55);
+            playSynthTone(587.33, 0.25);
+            setTimeout(() => playSynthTone(783.99, 0.25), 90);
+            setTimeout(() => playSynthTone(1046.5, 0.45), 180);
+            renderCard();
+            setTimeout(() => {
+              const scroller = document.getElementById('scrapbook-scroller');
+              if (scroller) scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
+            }, 120);
+          }
+        });
+
+        document.getElementById('btn-bottom-prev')?.addEventListener('click', () => goToStage(2));
+        document.getElementById('btn-bottom-restart')?.addEventListener('click', replayFromStart);
+      }
+    }
+
+    function goToStage(stageNum) {
+      state.stage = stageNum;
+      if (stageNum !== 3 && state.isPlayingMusic) {
+        stopBackgroundAudio();
+      }
+      renderCard();
+    }
+
+    function replayFromStart() {
+      stopBackgroundAudio();
+      state.stage = 1;
+      state.introStep = 'hat';
+      state.candlesLit = true;
+      state.giftOpened = false;
+      renderCard();
+    }
+
+    // =========================================================================
+    // 7. DETEKSI TIUPAN MIKROFON
+    // =========================================================================
+    async function triggerMicBlow(onBlow) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast('Perangkat tidak mendukung mic, klik tombol Tiup saja ya!', 'info');
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const ctx = getAudioContext();
+        const src = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        src.connect(analyser);
+
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        showToast('Mikrofon aktif! Tiup ke arah layar HP 💨', 'info');
+
+        let finished = false;
+        const startTime = Date.now();
+
+        const loop = () => {
+          if (finished || !state.candlesLit || state.stage !== 2) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+          analyser.getByteFrequencyData(data);
+          let sum = 0;
+          for (let i = 0; i < data.length; i++) sum += data[i];
+          if (sum / data.length > 58) {
+            finished = true;
+            stream.getTracks().forEach((t) => t.stop());
+            onBlow();
+            return;
+          }
+          if (Date.now() - startTime < 6500) {
+            requestAnimationFrame(loop);
+          } else {
+            stream.getTracks().forEach((t) => t.stop());
+            showToast('Klik tombol Tiup di bawah kue ya 😊', 'info');
+          }
+        };
+        requestAnimationFrame(loop);
+      } catch (e) {
+        showToast('Izin mic tidak aktif, silakan klik tombol Tiup 😊', 'info');
+      }
+    }
+
+    // =========================================================================
+    // 8. SINKRONISASI EDITOR, TAB MOBILE/DESKTOP & MODE LAYAR PENUH
+    // =========================================================================
+    function syncEditorInputs() {
+      const c = state.card;
+      document.getElementById('inp-song-mode').value = c.songMode;
+      document.getElementById('inp-song-title').value = c.songTitle;
+      document.getElementById('inp-recipient').value = c.recipient;
+      document.getElementById('inp-hat-bubble').value = c.hatBubble;
+      document.getElementById('inp-cake-before').value = c.cakeBeforeText;
+      document.getElementById('inp-cake-after').value = c.cakeAfterText;
+      document.getElementById('inp-letter-title').value = c.letterTitle;
+      document.getElementById('inp-letter-body').value = c.letterBody;
+      document.getElementById('inp-tv1-chat1').value = c.tv1Chat1;
+      document.getElementById('inp-tv1-chat2').value = c.tv1Chat2;
+      document.getElementById('inp-tv2-chat1').value = c.tv2Chat1;
+      document.getElementById('inp-tv2-chat2').value = c.tv2Chat2;
+      document.getElementById('inp-bouquet-title').value = c.bouquetTitle;
+      document.getElementById('inp-envelope-label').value = c.envelopeLabel;
+      document.getElementById('inp-gift-note').value = c.giftNote;
+      document.getElementById('inp-sender').value = c.sender;
+
+      const mp3Wrap = document.getElementById('mp3-upload-wrapper');
+      if (mp3Wrap) mp3Wrap.classList.toggle('hidden', c.songMode !== 'mp3');
+
+      Object.keys(c.photos).forEach((slot) => {
+        const thumb = document.getElementById(`thumb-${slot}`);
+        if (thumb) thumb.src = c.photos[slot];
+      });
+
+      applyThemeVariables(c.theme);
+    }
+
+    function switchStudioTab(tabName) {
+      state.activeTab = tabName;
+      const editTabBtn = document.getElementById('tab-btn-edit');
+      const prevTabBtn = document.getElementById('tab-btn-preview');
+      const editorPanel = document.getElementById('editor-panel');
+      const previewPanel = document.getElementById('preview-panel');
+
+      const activeClass = 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer bg-white text-[#D6336C] shadow-xs';
+      const inactiveClass = 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer text-[#5C4033] hover:text-[#D6336C]';
+
+      if (tabName === 'edit') {
+        editTabBtn.className = activeClass;
+        prevTabBtn.className = inactiveClass;
+        editorPanel?.classList.remove('hidden');
+        // Di desktop (lg:) preview tetap tampil berdampingan; di HP sembunyikan saat tab Edit aktif
+        previewPanel?.classList.add('hidden', 'lg:flex');
+        previewPanel?.classList.remove('flex');
+      } else {
+        prevTabBtn.className = activeClass;
+        editTabBtn.className = inactiveClass;
+        previewPanel?.classList.remove('hidden');
+        previewPanel?.classList.add('flex');
+        // Di HP sembunyikan editor saat tab Preview Kartu dibuka penuh
+        editorPanel?.classList.add('hidden', 'lg:block');
+      }
+    }
+
+    function setFullscreenViewer(enabled) {
+      state.fullscreenViewer = enabled;
+      const header = document.getElementById('studio-header');
+      const editorPanel = document.getElementById('editor-panel');
+      const previewPanel = document.getElementById('preview-panel');
+      const stageBar = document.getElementById('quick-stage-bar');
+      const frame = document.getElementById('phone-frame');
+      const notch = document.getElementById('phone-notch');
+      const exitBtn = document.getElementById('btn-exit-fullscreen');
+      const main = document.getElementById('studio-main');
+      const grid = document.getElementById('studio-grid');
+
+      if (enabled) {
+        header?.classList.add('hidden');
+        editorPanel?.classList.add('hidden');
+        editorPanel?.classList.remove('lg:block');
+        previewPanel?.classList.remove('hidden');
+        previewPanel?.classList.add('flex', 'lg:col-span-12');
+        previewPanel?.classList.remove('lg:col-span-6');
+        stageBar?.classList.add('hidden');
+        notch?.classList.add('hidden');
+        exitBtn?.classList.remove('hidden');
+        frame?.classList.add('viewer-only');
+        main?.classList.remove('px-3', 'sm:px-5', 'py-5', 'max-w-6xl');
+        main?.classList.add('p-0', 'max-w-none');
+        grid?.classList.remove('gap-6');
+      } else {
+        header?.classList.remove('hidden');
+        stageBar?.classList.remove('hidden');
+        notch?.classList.remove('hidden');
+        exitBtn?.classList.add('hidden');
+        frame?.classList.remove('viewer-only');
+        main?.classList.add('px-3', 'sm:px-5', 'py-5', 'max-w-6xl');
+        main?.classList.remove('p-0', 'max-w-none');
+        grid?.classList.add('gap-6');
+        previewPanel?.classList.add('lg:col-span-6');
+        previewPanel?.classList.remove('lg:col-span-12');
+        editorPanel?.classList.add('lg:block');
+        switchStudioTab(state.activeTab);
+      }
+    }
+
+    function bindAllEvents() {
+      // Tab navigasi Edit vs Preview
+      document.getElementById('tab-btn-edit')?.addEventListener('click', () => switchStudioTab('edit'));
+      document.getElementById('tab-btn-preview')?.addEventListener('click', () => switchStudioTab('preview'));
+      document.getElementById('btn-editor-jump-preview')?.addEventListener('click', () => {
+        switchStudioTab('preview');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Pilihan tema warna pastel
+      document.querySelectorAll('.theme-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const themeKey = chip.getAttribute('data-theme');
+          if (!themeKey) return;
+          state.card.theme = themeKey;
+          applyThemeVariables(themeKey);
+          renderCard();
+        });
+      });
+
+      // Pilihan mode musik latar
+      document.getElementById('inp-song-mode')?.addEventListener('change', (e) => {
+        state.card.songMode = e.target.value;
+        const mp3Wrap = document.getElementById('mp3-upload-wrapper');
+        if (mp3Wrap) mp3Wrap.classList.toggle('hidden', state.card.songMode !== 'mp3');
+        if (state.isPlayingMusic) startBackgroundAudio();
+      });
+
+      // Upload MP3 kustom
+      document.getElementById('inp-mp3-file')?.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        if (state.customMp3Url) URL.revokeObjectURL(state.customMp3Url);
+        state.customMp3Url = URL.createObjectURL(file);
+        state.card.songTitle = file.name.replace(/\.[^/.]+$/, '').slice(0, 38);
+        document.getElementById('inp-song-title').value = state.card.songTitle;
+        document.getElementById('mp3-file-label').textContent = `🎵 ${file.name}`;
+        showToast('File audio MP3 berhasil dipasang!', 'success');
+        if (state.isPlayingMusic) startBackgroundAudio();
+        renderCard();
+      });
+
+      // Binding input teks real-time
+      const textMap = [
+        ['inp-song-title', 'songTitle'],
+        ['inp-recipient', 'recipient'],
+        ['inp-hat-bubble', 'hatBubble'],
+        ['inp-cake-before', 'cakeBeforeText'],
+        ['inp-cake-after', 'cakeAfterText'],
+        ['inp-letter-title', 'letterTitle'],
+        ['inp-letter-body', 'letterBody'],
+        ['inp-tv1-chat1', 'tv1Chat1'],
+        ['inp-tv1-chat2', 'tv1Chat2'],
+        ['inp-tv2-chat1', 'tv2Chat1'],
+        ['inp-tv2-chat2', 'tv2Chat2'],
+        ['inp-bouquet-title', 'bouquetTitle'],
+        ['inp-envelope-label', 'envelopeLabel'],
+        ['inp-gift-note', 'giftNote'],
+        ['inp-sender', 'sender'],
+      ];
+
+      textMap.forEach(([id, key]) => {
+        document.getElementById(id)?.addEventListener('input', (e) => {
+          state.card[key] = e.target.value;
+          renderCard();
+        });
+      });
+
+      // Upload & Kompresi 7 Foto Kenangan
+      document.querySelectorAll('.photo-file-input').forEach((input) => {
+        input.addEventListener('change', async (e) => {
+          const file = e.target.files && e.target.files[0];
+          const slot = input.getAttribute('data-photo-slot');
+          if (!file || !slot) return;
+
+          if (!file.type.startsWith('image/')) {
+            showToast('Harap pilih file foto/gambar ya!', 'error');
+            return;
+          }
+
+          try {
+            // Kompres ke 170x170 JPEG agar seluruh foto ikut muat di link #data=...
+            const compressed = await compressAndCropImage(file, 170, 0.64);
+            state.card.photos[slot] = compressed;
+            const thumb = document.getElementById(`thumb-${slot}`);
+            if (thumb) thumb.src = compressed;
+
+            showToast('Foto berhasil dipasang & dikompresi untuk link! 📸', 'success');
+
+            if (slot === 'mainPhoto') {
+              state.introStep = 'full';
+              goToStage(1);
+            } else {
+              if (slot === 'giftPhoto') state.giftOpened = true;
+              goToStage(3);
+            }
+          } catch (err) {
+            showToast('Gagal memproses foto, silakan coba gambar lain.', 'error');
+          }
+        });
+      });
+
+      // Pil tahap cepat
+      document.querySelectorAll('.stage-pill').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = Number(btn.getAttribute('data-goto'));
+          if (target === 1) state.introStep = 'full';
+          goToStage(target);
+          if (target === 3 && !state.isPlayingMusic) startBackgroundAudio();
+        });
+      });
+
+      document.getElementById('btn-preview-replay')?.addEventListener('click', replayFromStart);
+
+      // Reset ke contoh default
+      document.getElementById('btn-reset-default')?.addEventListener('click', () => {
+        state.card = structuredClone(DEFAULT_CARD);
+        syncEditorInputs();
+        replayFromStart();
+        showToast('Pengaturan kartu dikembalikan ke contoh awal', 'info');
+      });
+
+      // Buat Link & Salin (#data=...)
+      const generateAndCopyShareLink = () => {
+        const hashStr = encodeCardToHash();
+        if (!hashStr) {
+          showToast('Gagal membuat tautan kartu', 'error');
+          return;
+        }
+        window.location.hash = hashStr;
+        const shareUrl = `${window.location.origin}${window.location.pathname}#${hashStr}`;
+        const copied = copyTextToClipboard(shareUrl);
+        if (copied) {
+          showToast('Link kartu + foto tersalin! Siap dikirim ke WhatsApp 💌', 'success');
+        } else {
+          showToast('Link sudah diperbarui di address bar browser!', 'info');
+        }
+      };
+
+      document.getElementById('btn-header-share')?.addEventListener('click', generateAndCopyShareLink);
+      document.getElementById('btn-editor-generate-link')?.addEventListener('click', generateAndCopyShareLink);
+
+      // Layar Penuh
+      document.getElementById('btn-header-fullscreen')?.addEventListener('click', () => setFullscreenViewer(true));
+      document.getElementById('btn-exit-fullscreen')?.addEventListener('click', () => setFullscreenViewer(false));
+    }
+
+    // =========================================================================
+    // 9. INISIALISASI SAAT HALAMAN DIBUKA
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      const loadedFromHash = decodeCardFromHash();
+      if (loadedFromHash) {
+        state.card = loadedFromHash;
+        syncEditorInputs();
+        setFullscreenViewer(true);
+        showToast('Membuka kartu ulang tahun spesial untukmu! 🎂', 'success');
+      } else {
+        syncEditorInputs();
+        switchStudioTab('edit');
+      }
+
+      bindAllEvents();
+      renderCard();
+    });
+  </script>
+</body>
+</html>
